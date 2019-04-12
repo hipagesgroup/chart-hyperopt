@@ -1,0 +1,8 @@
+---
+repositoryUrl: https://github.com/hipagesgroup/chart-hyperopt
+verifyConditions: ['@semantic-release/github']
+prepare: []
+publish:
+  - path: "@semantic-release/exec"
+    cmd: "CIRCLE_TAG=${nextRelease.version} make helm/push"
+  - '@semantic-release/github'
