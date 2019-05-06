@@ -1,14 +1,14 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: {{ include "hyperopt.fullname" . }}-workers
+  name: {{ include "hyperopt.fullname" . }}-monitor
   labels:
-    app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workers
+    app.kubernetes.io/name: {{ include "hyperopt.name" . }}-monitor
     helm.sh/chart: {{ include "hyperopt.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  replicas: {{ .Values.worker.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "hyperopt.name" . }}c
@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workers
+        app.kubernetes.io/name: {{ include "hyperopt.name" . }}-monitor
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
@@ -24,7 +24,7 @@ spec:
           image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}"
           imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
           command:
-            - ./launch_model_fitter.sh
+            - monitor
           args: ["hyperopt-worker"]
           env:
             - name: AWS_SECRET_ACCESS_KEY
@@ -40,7 +40,7 @@ spec:
             - name: MONGO_DB_ADDRESS
               value: "{{ include "hyperopt.fullname" . }}-mongo{{ .Release.Namespace }}.svc.cluster.local"
             - name: MONGO_DB_PORT
-              value: "27017"
+              value: {{ .Values.mongo.port }}
             {{- range $key, $val := .Values.worker.env }}
             - name: {{ $key | upper }}
               value: {{ $val | quote }}

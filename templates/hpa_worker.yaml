@@ -1,0 +1,28 @@
+{{- if .Values.worker.hpa.enabled -}}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "hyperopt.fullname" . }}-workers
+  labels:
+    app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workers
+    helm.sh/chart: {{ include "hyperopt.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: {{ include "hyperopt.name" . }}-workers
+  minReplicas: {{ .Values.worker.hpa.minReplicas }}
+  maxReplicas: {{ .Values.worker.hpa.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.worker.hpa.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.worker.hpa.targetMemoryUtilizationPercentage }}
+{{- end }}
+

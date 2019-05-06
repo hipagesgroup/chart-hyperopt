@@ -16,6 +16,57 @@ worker:
     type: ClusterIP
     port: 80
 
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  env:
+    AWS_REGION : "{{ getenv "AWS_DEFAULT_REGION" }}"
+    AWS_DEFAULT_REGION : "{{ getenv "AWS_DEFAULT_REGION" }}"
+    AWS_ACCOUNT_ID: "{{ getenv "AWS_ACCOUNT_ID" }}"
+    AWS_S3_BUCKET: "au-com-hipages-radagast"
+    SCORING_METRIC: ""
+    LOGLEVEL: "DEBUG"
+    OPTIMISER_CONFIGURATION_PATH: ""
+    OPTIMISER_CONFIGURATION_LOCATION: "S3"
+
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 50
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 75
+
+
+mongo:
+  image:
+    repository: mongo
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  nameOverride: ""
+  fullnameOverride: ""
+
+  port: 27017
+
+  service:
+    type: ClusterIP
+    port: 27017
+
   ingress:
     enabled: false
     annotations: {}
@@ -48,6 +99,39 @@ worker:
   affinity: {}
 
 
+monitor:
+  image:
+    repository: hipages/monitor
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  nameOverride: ""
+  fullnameOverride: ""
+
+  service:
+    type: ClusterIP
+    port: 27017
+
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+
 awsCredentials:
   aws_access_key_id: "example"
   aws_secret_access_key: "example"
+
