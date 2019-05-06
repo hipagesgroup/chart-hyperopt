@@ -2,11 +2,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 worker:
-  replicaCount: 1
+  replicaCount: 2
 
   image:
-    repository: nginx
-    tag: stable
+    repository: hipages/hyperopt
+    tag: latest
     pullPolicy: IfNotPresent
 
   nameOverride: ""
@@ -35,10 +35,9 @@ worker:
   affinity: {}
 
   env:
-    AWS_REGION : "{{ getenv "AWS_DEFAULT_REGION" }}"
-    AWS_DEFAULT_REGION : "{{ getenv "AWS_DEFAULT_REGION" }}"
-    AWS_ACCOUNT_ID: "{{ getenv "AWS_ACCOUNT_ID" }}"
-    AWS_S3_BUCKET: "au-com-hipages-radagast"
+    AWS_DEFAULT_REGION : "ap-southeast-2"
+    AWS_ACCOUNT_ID: "987654321"
+    AWS_S3_BUCKET: "some-s3-bucket"
     SCORING_METRIC: ""
     LOGLEVEL: "DEBUG"
     OPTIMISER_CONFIGURATION_PATH: ""

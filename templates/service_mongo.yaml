@@ -12,7 +12,7 @@ spec:
   ports:
     - port: {{ .Values.mongo.service.port }}
       targetPort: {{ .Values.mongo.service.port }}
-      protocol: http
+      protocol: TCP
       name: mongo
   selector:
     app.kubernetes.io/name: {{ include "hyperopt.name" . }}-mongo
