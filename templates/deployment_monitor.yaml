@@ -30,11 +30,7 @@ spec:
             - name: MONGO_DB_ADDRESS
               value: "{{ include "hyperopt.fullname" . }}-mongo{{ .Release.Namespace }}.svc.cluster.local"
             - name: MONGO_DB_PORT
-              value: {{ .Values.mongo.port }}
-            {{- range $key, $val := .Values.worker.env }}
-            - name: {{ $key | upper }}
-              value: {{ $val | quote }}
-            {{- end}}
+              value: "{{ .Values.mongo.port }}"
           ports:
             - name: http
               containerPort: 80
