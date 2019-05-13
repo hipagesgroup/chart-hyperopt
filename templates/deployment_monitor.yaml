@@ -25,7 +25,7 @@ spec:
           imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
           env:
             - name: MONGO_DB_ADDRESS
-              value: "{{ .Release.Name }}-mongo.{{ .Release.Namespace }}.svc.cluster.local"
+              value: "{{ include "hyperopt.fullname" . }}-mongo.{{ .Release.Namespace }}.svc.cluster.local"
             - name: MONGO_DB_PORT
               value: "{{ .Values.mongo.port }}"
             - name: TRIALS_DB
