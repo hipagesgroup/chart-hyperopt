@@ -1,19 +1,12 @@
-1. Get the mongo URL by running these commands:
-{{- if .Values.mongo.ingress.enabled }}
-{{- range .Values.mongo.ingress.hosts }}
-  http{{ if $.Values.mongo.ingress.tls }}s{{ end }}://{{ . }}{{ $.Values.mongo.ingress.path }}
-{{- end }}
-{{- else if contains "NodePort" .Values.mongo.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "hyperopt.fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT
-{{- else if contains "LoadBalancer" .Values.mongo.service.type }}
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get svc -w {{ include "hyperopt.fullname" . }}'
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "hyperopt.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  echo http://$SERVICE_IP:{{ .Values.mongo.service.port }}
-{{- else if contains "ClusterIP" .Values.mongo.service.type }}
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "hyperopt.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl port-forward $POD_NAME 8080:80
-{{- end }}
+1. To connect mongo db using your local to deploy hyperopt job
+
+export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "hyperopt.name" . }}-mongo,app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+
+kubectl port-forward $POD_NAME {{ .Values.mongo.port }}:{{ .Values.mongo.port }}
+
+You can then connect to mongo db at:
+localhost:{{ .Values.mongo.port }}
+
+2. you can connect to the mongo db on other deployments using this service url:
+"{{ .Release.Name }}-mongo{{ .Release.Namespace }}.svc.cluster.local"
+
