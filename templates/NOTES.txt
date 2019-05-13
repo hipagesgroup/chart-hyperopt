@@ -8,5 +8,5 @@ You can then connect to mongo db at:
 localhost:{{ .Values.mongo.port }}
 
 2. you can connect to the mongo db on other deployments using this service url:
-"{{ .Release.Name }}-mongo{{ .Release.Namespace }}.svc.cluster.local"
+"{{ .Release.Name }}-mongo.{{ .Release.Namespace }}.svc.cluster.local"
 

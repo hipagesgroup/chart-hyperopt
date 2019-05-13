@@ -1,28 +1,29 @@
+{{- if .Values.workload.enabled -}}
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: {{ include "hyperopt.fullname" . }}-workers
+  name: {{ include "hyperopt.fullname" . }}-workload
   labels:
-    app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workers
+    app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workload
     helm.sh/chart: {{ include "hyperopt.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  replicas: {{ .Values.worker.replicaCount }}
+  replicas: {{ .Values.workload.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workers
+      app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workload
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workers
+        app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workload
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}"
-          imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+          image: "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}"
+          imagePullPolicy: {{ .Values.workload.image.pullPolicy }}
           env:
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
@@ -42,7 +43,7 @@ spec:
               value: "{{ .Values.mongo.trials_db }}"
             - name: TRIALS_COLLECTION
               value: "{{ .Values.mongo.trials_collection }}"
-            {{- range $key, $val := .Values.worker.env }}
+            {{- range $key, $val := .Values.workload.env }}
             - name: {{ $key | upper }}
               value: {{ $val | quote }}
             {{- end}}
@@ -59,16 +60,17 @@ spec:
               path: /
               port: http
           resources:
-{{ toYaml .Values.worker.resources | indent 12 }}
-    {{- with .Values.worker.nodeSelector }}
+{{ toYaml .Values.workload.resources | indent 12 }}
+    {{- with .Values.workload.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- with .Values.worker.affinity }}
+    {{- with .Values.workload.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- with .Values.worker.tolerations }}
+    {{- with .Values.workload.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
+{{- end }}

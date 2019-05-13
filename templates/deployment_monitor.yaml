@@ -21,16 +21,17 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}"
+          image: "{{ .Values.monitor.image.repository }}:{{ .Values.monitor.image.tag }}"
           imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
-          command:
-            - monitor
-          args: ["hyperopt-worker"]
           env:
             - name: MONGO_DB_ADDRESS
-              value: "{{ include "hyperopt.fullname" . }}-mongo{{ .Release.Namespace }}.svc.cluster.local"
+              value: "{{ .Release.Name }}-mongo.{{ .Release.Namespace }}.svc.cluster.local"
             - name: MONGO_DB_PORT
               value: "{{ .Values.mongo.port }}"
+            - name: TRIALS_DB
+              value: "{{ .Values.mongo.trials_db }}"
+            - name: TRIALS_COLLECTION
+              value: "{{ .Values.mongo.trials_collection }}"
           ports:
             - name: http
               containerPort: 80
