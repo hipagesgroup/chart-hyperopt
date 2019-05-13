@@ -24,16 +24,6 @@ spec:
           image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}"
           imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
           env:
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "hyperopt.name" . }}
-                  key: aws_secret_access_key
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "hyperopt.name" . }}
-                  key: aws_access_key_id
             - name: MONGO_DB_ADDRESS
               value: "{{ include "hyperopt.fullname" . }}-mongo.{{ .Release.Namespace }}.svc.cluster.local"
             - name: MONGO_DB_PORT
