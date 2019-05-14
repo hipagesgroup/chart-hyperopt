@@ -1,6 +1,7 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: {{ include "hyperopt.fullname" . }}-mongo
   labels:
     app.kubernetes.io/name: {{ include "hyperopt.name" . }}-mongo
@@ -23,18 +24,6 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.mongo.image.repository }}:{{ .Values.mongo.image.tag }}"
           imagePullPolicy: {{ .Values.mongo.image.pullPolicy }}
-          ports:
-            - name: mongo
-              containerPort: {{ .Values.mongo.port }}
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
           resources:
 {{ toYaml .Values.mongo.resources | indent 12 }}
     {{- with .Values.mongo.nodeSelector }}

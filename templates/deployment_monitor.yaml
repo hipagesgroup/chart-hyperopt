@@ -2,6 +2,7 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: {{ include "hyperopt.fullname" . }}-monitor
   labels:
     app.kubernetes.io/name: {{ include "hyperopt.name" . }}-monitor
@@ -44,18 +45,6 @@ spec:
                   name: {{ $secretname }}
                   key: {{ $val }}
             {{- end}}
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
           resources:
 {{ toYaml .Values.worker.resources | indent 12 }}
     {{- with .Values.worker.nodeSelector }}

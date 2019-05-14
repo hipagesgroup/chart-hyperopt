@@ -2,6 +2,7 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: {{ include "hyperopt.fullname" . }}-workers
   labels:
     app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workers
