@@ -75,6 +75,10 @@ monitor:
     UPDATE_INTERVAL: 1
     PYTHONUNBUFFERED: 0
     LOGLEVEL: INFO
+# Uncomment following lines to attach secrets as env vars
+#  secrets:
+#    AWS_ACCESS_KEY_ID : aws_access_key_id
+#    AWS_SECRET_ACCESS_KEY : aws_secret_access_key
 
 
 worker:
@@ -119,6 +123,10 @@ worker:
     PYTHONUNBUFFERED: 0
     NUM_EVAL_STEPS: 1
     MULTIPLIER: 1
+# Uncomment following lines to attach secrets as env vars
+  secrets:
+    AWS_ACCESS_KEY_ID : aws_access_key_id
+    AWS_SECRET_ACCESS_KEY : aws_secret_access_key
 
   hpa:
     enabled: false
@@ -165,9 +173,14 @@ workload:
     NUM_EVAL_STEPS: 10
     MULTIPLIER: 10
     HYPEROPT_EXP_KEY: 100
+# Uncomment following lines to attach secrets as env vars
+#  secrets:
+#    AWS_ACCESS_KEY_ID : aws_access_key_id
+#    AWS_SECRET_ACCESS_KEY : aws_secret_access_key
 
-
-awsCredentials:
+# Place secret values here, which are then deployed as kube secrets
+secrets:
+  enabled: true
   aws_access_key_id: "example"
   aws_secret_access_key: "example"
 

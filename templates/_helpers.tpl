@@ -31,14 +31,3 @@ Create chart name and version as used by the chart label.
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/*
-Create secrets from values
-*/}}
-{{- define "aws_secret_access_key" }}
-{{- printf "%s" .Values.awsCredentials.aws_secret_access_key | b64enc }}
-{{- end }}
-
-{{- define "aws_access_key_id" }}
-{{- printf "%s" .Values.awsCredentials.aws_access_key_id | b64enc }}
-{{- end }}
-

@@ -1,3 +1,4 @@
+{{- $secretname := include "hyperopt.fullname" . -}}
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
@@ -32,6 +33,17 @@ spec:
               value: "{{ .Values.mongo.trials_db }}"
             - name: TRIALS_COLLECTION
               value: "{{ .Values.mongo.trials_collection }}"
+            {{- range $key, $val := .Values.monitor.env }}
+            - name: {{ $key | upper }}
+              value: {{ $val | quote }}
+            {{- end}}
+            {{- range $key, $val := .Values.monitor.secrets }}
+            - name: {{ $key | upper }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretname }}
+                  key: {{ $val }}
+            {{- end}}
           ports:
             - name: http
               containerPort: 80

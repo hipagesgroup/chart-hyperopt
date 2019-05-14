@@ -1,4 +1,5 @@
 {{- if .Values.workload.enabled -}}
+{{- $secretname := include "hyperopt.fullname" . -}}
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
@@ -36,6 +37,13 @@ spec:
             {{- range $key, $val := .Values.workload.env }}
             - name: {{ $key | upper }}
               value: {{ $val | quote }}
+            {{- end}}
+            {{- range $key, $val := .Values.workload.secrets }}
+            - name: {{ $key | upper }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretname }}
+                  key: {{ $val }}
             {{- end}}
           ports:
             - name: http
