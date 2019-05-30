@@ -101,7 +101,7 @@ jobs:
 
   chart_semantic_release:
     docker:
-      - image: circleci/node:9
+      - image: circleci/node:10
     steps:
       - *restore_repo
       - checkout
