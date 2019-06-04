@@ -1,2 +1,4 @@
 # chart-hyperopt
-Helm Chart to deploy hyperopt: Distributed Asynchronous Hyperparameter Optimization in Python
+© Hipages Group Pty Ltd 2019
+
+Helm Chart to deploy [hyperopt](https://github.com/hyperopt/hyperopt) on kubernetes
