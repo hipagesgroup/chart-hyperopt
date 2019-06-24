@@ -9,7 +9,8 @@ $ helm install .
 
 ## Introduction
 
-This chart bootstraps a [Hyperopt](https://github.com/hyperopt/hyperopt) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Hyperopt](https://github.com/hyperopt/hyperopt) deployment on a 
+[Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -28,9 +29,13 @@ To install the chart with the release name `my-release`:
 $ helm install --name my-release .
 ```
 
-The command deploys Hyperopt on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys Hyperopt on the Kubernetes cluster in the default configuration. The [configuration](#configuration) 
+section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
+
+The helm chart outputs some useful information at the time of installation, like the portforward command required to 
+connect to mongo db.
 
 ## Uninstalling the Chart
 
