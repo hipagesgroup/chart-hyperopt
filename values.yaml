@@ -43,8 +43,8 @@ mongo:
 
 monitor:
   image:
-    repository: hipages/hyperkops
-    tag: monitor-master
+    repository: hipages/hyperkops-monitor
+    tag: latest
     pullPolicy: IfNotPresent
 
   nameOverride: ""
@@ -82,8 +82,8 @@ worker:
   replicaCount: 2
 
   image:
-    repository: hipages/hyperkops
-    tag: worker-master
+    repository: hipages/hyperkops-worker
+    tag: latest
     pullPolicy: IfNotPresent
 
   nameOverride: ""
@@ -134,8 +134,8 @@ workload:
   replicaCount: 1
 
   image:
-    repository: hipages/hyperkops
-    tag: workload-master
+    repository: hipages/hyperkops-example
+    tag: latest
     pullPolicy: IfNotPresent
 
   nameOverride: ""
