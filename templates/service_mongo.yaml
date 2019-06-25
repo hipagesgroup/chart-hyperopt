@@ -13,7 +13,7 @@ spec:
   ports:
     - port: {{ .Values.mongo.port }}
       targetPort: {{ .Values.mongo.port }}
-      name: mongo
+      name: "mongo"
   livenessProbe:
     exec:
       command:
@@ -38,7 +38,4 @@ spec:
     failureThreshold: 5
   selector:
     app.kubernetes.io/name: {{ include "hyperopt.name" . }}-mongo
-    helm.sh/chart: {{ include "hyperopt.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
 
