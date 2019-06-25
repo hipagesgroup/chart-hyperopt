@@ -67,9 +67,8 @@ monitor:
   affinity: {}
 
   env:
-    TIMEOUT_INTERVAL: 15
+    TRIALS_TIMEOUT_INTERVAL: 15
     UPDATE_INTERVAL: 1
-    PYTHONUNBUFFERED: 0
     LOGLEVEL: INFO
 
   secrets: {}
@@ -158,10 +157,9 @@ workload:
   affinity: {}
 
   env:
-    PYTHONUNBUFFERED: 0
-    NUM_EVAL_STEPS: 10
-    MULTIPLIER: 10
-    HYPEROPT_EXP_KEY: 100
+    LOGLEVEL: INFO
+    NUM_EVAL_STEPS: 1000
+    MULTIPLIER: 2
 
   secrets: {}
 # Uncomment following lines to attach secrets as env vars

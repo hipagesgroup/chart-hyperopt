@@ -32,8 +32,6 @@ spec:
               value: "{{ .Values.mongo.port }}"
             - name: TRIALS_DB
               value: "{{ .Values.mongo.trials_db }}"
-            - name: TRIALS_COLLECTION
-              value: "{{ .Values.mongo.trials_collection }}"
             {{- range $key, $val := .Values.worker.env }}
             - name: {{ $key | upper }}
               value: {{ $val | quote }}
