@@ -1,0 +1,12 @@
+1. To connect mongo db using your local to deploy hyperopt job
+
+export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "hyperopt.name" . }}-mongo,app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+
+kubectl port-forward $POD_NAME {{ .Values.mongo.port }}:{{ .Values.mongo.port }}
+
+You can then connect to mongo db at:
+localhost:{{ .Values.mongo.port }}
+
+2. you can connect to the mongo db on other deployments within the kubernetes environment using this service url:
+"{{ include "hyperopt.fullname" . }}-mongo.{{ .Release.Namespace }}.svc.cluster.local"
+

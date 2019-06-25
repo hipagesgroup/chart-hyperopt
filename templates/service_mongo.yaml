@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ include "hyperopt.fullname" . }}-mongo
+  labels:
+    app.kubernetes.io/name: {{ include "hyperopt.name" . }}-mongo
+    helm.sh/chart: {{ include "hyperopt.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: {{ .Values.mongo.service.type }}
+  ports:
+    - port: {{ .Values.mongo.port }}
+      targetPort: {{ .Values.mongo.port }}
+      name: "mongo"
+  livenessProbe:
+    exec:
+      command:
+      - mongo
+      - --eval
+      - "db.adminCommand('ping')"
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 30
+    successThreshold: 5
+    failureThreshold: 5
+  readinessProbe:
+    exec:
+      command:
+      - mongo
+      - --eval
+      - "db.adminCommand('ping')"
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 30
+    successThreshold: 5
+    failureThreshold: 5
+  selector:
+    app.kubernetes.io/name: {{ include "hyperopt.name" . }}-mongo
+

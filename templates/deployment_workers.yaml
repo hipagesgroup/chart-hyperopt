@@ -1,0 +1,59 @@
+{{- $secretname := include "hyperopt.fullname" . -}}
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ include "hyperopt.fullname" . }}-workers
+  labels:
+    app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workers
+    helm.sh/chart: {{ include "hyperopt.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.worker.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workers
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workers
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}"
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+          env:
+            - name: MONGO_DB_ADDRESS
+              value: "{{ include "hyperopt.fullname" . }}-mongo.{{ .Release.Namespace }}.svc.cluster.local"
+            - name: MONGO_DB_PORT
+              value: "{{ .Values.mongo.port }}"
+            - name: TRIALS_DB
+              value: "{{ .Values.mongo.trials_db }}"
+            {{- range $key, $val := .Values.worker.env }}
+            - name: {{ $key | upper }}
+              value: {{ $val | quote }}
+            {{- end}}
+            {{- range $key, $val := .Values.worker.secrets }}
+            - name: {{ $key | upper }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretname }}
+                  key: {{ $val }}
+            {{- end}}
+          resources:
+{{ toYaml .Values.worker.resources | indent 12 }}
+    {{- with .Values.worker.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.worker.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.worker.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

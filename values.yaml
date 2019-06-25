@@ -1,0 +1,175 @@
+# Default values for hyperopt.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+common:
+
+mongo:
+  image:
+    repository: mongo
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  nameOverride: ""
+  fullnameOverride: ""
+
+  port: 27017
+
+  trials_db: model_db
+  trials_collection: jobs
+
+  service:
+    type: ClusterIP
+
+  resources: {}
+    # If you want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  env: {}
+# Uncomment following lines to add env vars
+#    ABC: DEF
+
+
+monitor:
+  image:
+    repository: hipages/hyperkops-monitor
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  nameOverride: ""
+  fullnameOverride: ""
+
+  resources: {}
+    # If you want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  env:
+    TRIALS_TIMEOUT_INTERVAL: 15
+    UPDATE_INTERVAL: 1
+    LOGLEVEL: INFO
+
+  secrets: {}
+# Uncomment following lines to attach secrets as env vars
+#    AWS_ACCESS_KEY_ID : aws_access_key_id
+#    AWS_SECRET_ACCESS_KEY : aws_secret_access_key
+
+
+worker:
+  replicaCount: 2
+
+  image:
+    repository: hipages/hyperkops-worker
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  nameOverride: ""
+  fullnameOverride: ""
+
+  resources: {}
+    # If you want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  env:
+    AWS_DEFAULT_REGION : "ap-southeast-2"
+    AWS_ACCOUNT_ID: "987654321"
+    AWS_S3_BUCKET: "some-s3-bucket"
+    SCORING_METRIC: ""
+    LOGLEVEL: "DEBUG"
+    OPTIMISER_CONFIGURATION_PATH: ""
+    OPTIMISER_CONFIGURATION_LOCATION: "S3"
+    PYTHONUNBUFFERED: 0
+    NUM_EVAL_STEPS: 1
+    MULTIPLIER: 1
+
+  secrets:
+    AWS_ACCESS_KEY_ID : aws_access_key_id
+    AWS_SECRET_ACCESS_KEY : aws_secret_access_key
+
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 50
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 75
+
+
+workload:
+  enabled: true
+  replicaCount: 1
+
+  image:
+    repository: hipages/hyperkops-example
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  nameOverride: ""
+  fullnameOverride: ""
+
+  resources: {}
+    # If you want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  env:
+    LOGLEVEL: INFO
+    NUM_EVAL_STEPS: 1000
+    MULTIPLIER: 2
+
+  secrets: {}
+# Uncomment following lines to attach secrets as env vars
+#    AWS_ACCESS_KEY_ID : aws_access_key_id
+#    AWS_SECRET_ACCESS_KEY : aws_secret_access_key
+
+# Place secret values here, which are then deployed as kube secrets
+secrets:
+  enabled: true
+  data:
+    aws_access_key_id: "example"
+    aws_secret_access_key: "example"
+

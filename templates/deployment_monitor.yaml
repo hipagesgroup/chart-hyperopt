@@ -1,0 +1,65 @@
+{{- $secretname := include "hyperopt.fullname" . -}}
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ include "hyperopt.fullname" . }}-monitor
+  labels:
+    app.kubernetes.io/name: {{ include "hyperopt.name" . }}-monitor
+    helm.sh/chart: {{ include "hyperopt.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "hyperopt.name" . }}-monitor
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "hyperopt.name" . }}-monitor
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.monitor.image.repository }}:{{ .Values.monitor.image.tag }}"
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+          env:
+            - name: MONGO_DB_ADDRESS
+              value: "{{ include "hyperopt.fullname" . }}-mongo.{{ .Release.Namespace }}.svc.cluster.local"
+            - name: MONGO_DB_PORT
+              value: "{{ .Values.mongo.port }}"
+            - name: TRIALS_DB
+              value: "{{ .Values.mongo.trials_db }}"
+            - name: TRIALS_COLLECTION
+              value: "{{ .Values.mongo.trials_collection }}"
+            - name: NAMESPACE
+              value: "{{ .Release.Namespace }}"
+            - name: LABEL_SELECTOR
+              value: "app.kubernetes.io/name={{ include "hyperopt.name" . }}-workers"
+            {{- range $key, $val := .Values.monitor.env }}
+            - name: {{ $key | upper }}
+              value: {{ $val | quote }}
+            {{- end}}
+            {{- range $key, $val := .Values.monitor.secrets }}
+            - name: {{ $key | upper }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretname }}
+                  key: {{ $val }}
+            {{- end}}
+          resources:
+{{ toYaml .Values.worker.resources | indent 12 }}
+    {{- with .Values.worker.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.worker.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.worker.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
