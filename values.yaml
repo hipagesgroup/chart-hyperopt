@@ -1,7 +1,8 @@
 # Default values for hyperopt.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-common:
+nameOverride: ""
+fullnameOverride: ""
 
 mongo:
   image:
@@ -9,8 +10,6 @@ mongo:
     tag: latest
     pullPolicy: IfNotPresent
 
-  nameOverride: ""
-  fullnameOverride: ""
 
   port: 27017
 
@@ -47,9 +46,6 @@ monitor:
     tag: latest
     pullPolicy: IfNotPresent
 
-  nameOverride: ""
-  fullnameOverride: ""
-
   resources: {}
     # If you want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
@@ -85,9 +81,6 @@ worker:
     tag: latest
     pullPolicy: IfNotPresent
 
-  nameOverride: ""
-  fullnameOverride: ""
-
   resources: {}
     # If you want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
@@ -104,17 +97,7 @@ worker:
 
   affinity: {}
 
-  env:
-    AWS_DEFAULT_REGION : "ap-southeast-2"
-    AWS_ACCOUNT_ID: "987654321"
-    AWS_S3_BUCKET: "some-s3-bucket"
-    SCORING_METRIC: ""
-    LOGLEVEL: "DEBUG"
-    OPTIMISER_CONFIGURATION_PATH: ""
-    OPTIMISER_CONFIGURATION_LOCATION: "S3"
-    PYTHONUNBUFFERED: 0
-    NUM_EVAL_STEPS: 1
-    MULTIPLIER: 1
+  env: {}
 
   secrets:
     AWS_ACCESS_KEY_ID : aws_access_key_id
@@ -136,9 +119,6 @@ workload:
     repository: hipages/hyperkops-example
     tag: latest
     pullPolicy: IfNotPresent
-
-  nameOverride: ""
-  fullnameOverride: ""
 
   resources: {}
     # If you want to specify resources, uncomment the following
@@ -168,7 +148,7 @@ workload:
 
 # Place secret values here, which are then deployed as kube secrets
 secrets:
-  enabled: true
+  enabled: false
   data:
     aws_access_key_id: "example"
     aws_secret_access_key: "example"
