@@ -5,7 +5,7 @@ What changes are proposed in this pull request?
 
 How was this change tested?
 (Please explain how this patch was tested. E.g. unit tests, integration tests, manual tests, right now, the best way to 
-test is using minikube on your local, the following steps help you execute a test on local)
+test is using the kube environemnt available to you, the following steps help you execute a test with default values)
 - [ ] Manually deployed and tested with default values.yml
 `kubectl config use-context docker-for-desktop`
 `helm init`
