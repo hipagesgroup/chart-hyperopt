@@ -12,16 +12,13 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.workload.replicaCount }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workload
-      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
         app.kubernetes.io/name: {{ include "hyperopt.name" . }}-workload
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      restartPolicy: "Never"
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}"
