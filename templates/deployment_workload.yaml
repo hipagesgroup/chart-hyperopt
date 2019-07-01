@@ -1,7 +1,7 @@
 {{- if .Values.workload.enabled -}}
 {{- $secretname := include "hyperopt.fullname" . -}}
-apiVersion: apps/v1beta2
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   namespace: {{ .Release.Namespace }}
   name: {{ include "hyperopt.fullname" . }}-workload
