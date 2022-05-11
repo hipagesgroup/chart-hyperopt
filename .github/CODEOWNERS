@@ -9,7 +9,6 @@
 .github/*     @estahn
 .circle*    @estahn
 .releaserc  @estahn
-* @arihantsurana @datascienceChris @Gurado
 
 # Code owners to team for automatic PR Assignment
 * @hipagesgroup/datascience
